@@ -1,0 +1,12 @@
+17:00 start
+tie spring mvc to tomcat ok
+tie Thymeleaf to Spring mvc ok
+create test controller ok
+tie persistence layer to spring
+ հարց ֊  արդյո՞ք օպտիմալ ձևով եմ կպցրել EntityManager-ը․ Փորձել եմ օգտագործել JPA ստանդարտը, ոչ թե Hibernate
+
+
+//TODO user can add costs and incomes
+//TODO user can see all costs in table
+//TODO user can see all incomes in table
+//TODO if the future expenses are greater than the incomes, 
