@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ExpenseDto> getAllCosts(UserDto userDto) {
+    public List<ExpenseDto>     getAllCosts(UserDto userDto) {
         Optional<UserEntity> optionalUserEntity = userDao.find(userDto.getId());
         if (optionalUserEntity.isPresent()) {
             UserEntity entity = optionalUserEntity.get();

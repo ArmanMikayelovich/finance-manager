@@ -19,7 +19,7 @@
 
     <bean id="templateResolver"
           class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
-        <property name="prefix" value="/WEB-INF/static/html/"/>
+        <property name="prefix" value="WEB-INF/html/"/>
         <property name="suffix" value=".html" />
     </bean>
 

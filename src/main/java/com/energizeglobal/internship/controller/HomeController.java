@@ -1,23 +1,36 @@
 package com.energizeglobal.internship.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import com.energizeglobal.internship.dto.UserDto;
+import com.energizeglobal.internship.service.interfaces.ExpenseService;
+import com.energizeglobal.internship.service.interfaces.IncomeService;
+import com.energizeglobal.internship.service.interfaces.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.EntityManagerFactory;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
-    @Autowired
-    private ApplicationContext context;
 
-    @RequestMapping(value = "/", method= RequestMethod.GET)
-    public ModelAndView getHomePage(/**HttpServletRequest request, HttpServletResponse response*/) {
-        ModelAndView modelAndView = new ModelAndView("home");
-        EntityManagerFactory factory = (EntityManagerFactory) context.getBean(EntityManagerFactory.class);
-        return modelAndView;
+    private final UserService userService;
+    private final ExpenseService expenseService;
+    private final IncomeService incomeService;
+
+    public HomeController(UserService userService, ExpenseService expenseService,
+                          IncomeService incomeService) {
+        this.userService = userService;
+        this.expenseService = expenseService;
+        this.incomeService = incomeService;
     }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView getHomePage() {
+        ModelAndView model = new ModelAndView("mainUserPage");
+        Optional<UserDto> userOptional = userService.find(1L);
+        model.addObject("user", userOptional.get());
+        return model;
+    }
+
 }

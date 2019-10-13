@@ -10,7 +10,7 @@
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/finance"/>
             <property name="hibernate.connection.username" value="user"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="drop-and-create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="format_sql" value="true"/>
             <property name="hibernate.current_session_context_class" value="thread"/>

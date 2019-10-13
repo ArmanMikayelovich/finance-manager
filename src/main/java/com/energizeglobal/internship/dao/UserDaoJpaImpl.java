@@ -122,10 +122,9 @@ public class UserDaoJpaImpl implements UserDao {
         EntityManager entityManager = factory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            entityManager.merge(user);
+            user =entityManager.merge(user);
             List<ExpenseEntity> costs = user.getCosts();
-            List<ExpenseEntity> returnList = new ArrayList<>();
-            Collections.copy(costs, returnList);
+            List<ExpenseEntity> returnList = new ArrayList<>(costs);
             entityManager.getTransaction().commit();
             return returnList;
         } catch (RuntimeException ex) {
@@ -141,10 +140,9 @@ public class UserDaoJpaImpl implements UserDao {
         EntityManager entityManager = factory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            entityManager.merge(user);
+           user =  entityManager.merge(user);
             List<IncomeEntity> incomes = user.getIncomes();
-            List<IncomeEntity> returnList = new ArrayList<>();
-            Collections.copy(incomes, returnList);
+            List<IncomeEntity> returnList = new ArrayList<>(incomes);
             entityManager.getTransaction().commit();
             return returnList;
         } catch (RuntimeException ex) {
@@ -159,9 +157,8 @@ public class UserDaoJpaImpl implements UserDao {
     public void addExpense(UserEntity user, ExpenseEntity expense) {
         EntityManager entityManager = factory.createEntityManager();
         try {
-
             entityManager.getTransaction().begin();
-            entityManager.merge(user);
+            user = entityManager.merge(user);
             user.getCosts().add(expense);
             entityManager.getTransaction().commit();
         } catch (RuntimeException ex) {
@@ -176,7 +173,7 @@ public class UserDaoJpaImpl implements UserDao {
         EntityManager entityManager = factory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            entityManager.merge(user);
+           user =  entityManager.merge(user);
             user.getIncomes().add(income);
             entityManager.getTransaction().commit();
         } catch (RuntimeException ex) {
