@@ -30,6 +30,8 @@ public class HomeController {
         ModelAndView model = new ModelAndView("mainUserPage");
         Optional<UserDto> userOptional = userService.find(1L);
         model.addObject("user", userOptional.get());
+        model.addObject("pastIncomes", userService.getPastIncomes(userService.find(1L).get()));
+        model.addObject("pastCosts", userService.getPastCosts(userService.find(1L).get()));
         return model;
     }
 

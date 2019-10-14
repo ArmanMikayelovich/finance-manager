@@ -8,10 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.TypedQuery;
+import java.util.*;
 
 @Repository
 public class UserDaoJpaImpl implements UserDao {
@@ -122,7 +120,7 @@ public class UserDaoJpaImpl implements UserDao {
         EntityManager entityManager = factory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            user =entityManager.merge(user);
+            user = entityManager.merge(user);
             List<ExpenseEntity> costs = user.getCosts();
             List<ExpenseEntity> returnList = new ArrayList<>(costs);
             entityManager.getTransaction().commit();
@@ -140,7 +138,7 @@ public class UserDaoJpaImpl implements UserDao {
         EntityManager entityManager = factory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-           user =  entityManager.merge(user);
+            user = entityManager.merge(user);
             List<IncomeEntity> incomes = user.getIncomes();
             List<IncomeEntity> returnList = new ArrayList<>(incomes);
             entityManager.getTransaction().commit();
@@ -173,7 +171,7 @@ public class UserDaoJpaImpl implements UserDao {
         EntityManager entityManager = factory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-           user =  entityManager.merge(user);
+            user = entityManager.merge(user);
             user.getIncomes().add(income);
             entityManager.getTransaction().commit();
         } catch (RuntimeException ex) {
@@ -181,5 +179,31 @@ public class UserDaoJpaImpl implements UserDao {
         } finally {
             entityManager.close();
         }
+    }
+
+    @Override
+    public List<IncomeEntity> getPastIncomes(UserEntity user) {
+        EntityManager manager = factory.createEntityManager();
+        TypedQuery<IncomeEntity> query = manager.createQuery("Select income from IncomeEntity income " +
+                        "where income.user.id = :id and income.date < :date",
+                IncomeEntity.class);
+        query.setParameter("id", user.getId());
+        query.setParameter("date", new Date());
+        List<IncomeEntity> resultList = query.getResultList();
+        manager.close();
+        return resultList;
+    }
+
+    @Override
+    public List<ExpenseEntity> getPastCosts(UserEntity user) {
+        EntityManager manager = factory.createEntityManager();
+        TypedQuery<ExpenseEntity> query = manager.createQuery("Select expense from ExpenseEntity expense " +
+                        "where expense.user.id = :id and expense.date < :date",
+                ExpenseEntity.class);
+        query.setParameter("id", user.getId());
+        query.setParameter("date", new Date());
+        List<ExpenseEntity> resultList = query.getResultList();
+        manager.close();
+        return resultList;
     }
 }

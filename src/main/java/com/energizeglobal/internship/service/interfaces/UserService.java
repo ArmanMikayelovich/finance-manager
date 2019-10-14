@@ -30,4 +30,8 @@ public interface UserService {
 
      void addIncome(UserDto user,IncomeDto income);
 
+    List<IncomeDto> getPastIncomes(UserDto user);
+
+    List<ExpenseDto> getPastCosts(UserDto user);
+
 }

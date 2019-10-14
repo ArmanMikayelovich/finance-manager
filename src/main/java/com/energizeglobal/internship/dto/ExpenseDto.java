@@ -2,7 +2,7 @@ package com.energizeglobal.internship.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class ExpenseDto {
@@ -12,6 +12,6 @@ public class ExpenseDto {
 
     private String description;
 
-    private LocalDateTime dateTime;
+    private LocalDate dateTime;
 
 }

@@ -20,7 +20,7 @@ public class ExpenseEntity {
 
     private String description;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date date;
 

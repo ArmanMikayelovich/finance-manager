@@ -30,4 +30,7 @@ public interface UserDao {
 
     void addIncome(UserEntity user,IncomeEntity income);
 
+    List<IncomeEntity> getPastIncomes(UserEntity user);
+
+    List<ExpenseEntity> getPastCosts(UserEntity user);
 }

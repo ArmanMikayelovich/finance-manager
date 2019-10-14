@@ -20,7 +20,7 @@ public class IncomeEntity {
 
     private String description;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date date;
 

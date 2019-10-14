@@ -136,4 +136,27 @@ public class UserServiceImpl implements UserService {
             userDao.addIncome(userEntity, incomeEntity);
         }
     }
+
+    public List<IncomeDto> getPastIncomes(UserDto user) {
+        Optional<UserEntity> optional = userDao.find(user.getId());
+
+        if (optional.isPresent()) {
+            UserEntity userEntity = optional.get();
+            List<IncomeEntity> pastIncomes = userDao.getPastIncomes(userEntity);
+            return pastIncomes.stream().map(incomeService::toDto).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ExpenseDto> getPastCosts(UserDto user) {
+        Optional<UserEntity> optional = userDao.find(user.getId());
+
+        if (optional.isPresent()) {
+            UserEntity userEntity = optional.get();
+            List<ExpenseEntity> pastIncomes = userDao.getPastCosts(userEntity);
+            return pastIncomes.stream().map(expenseService::toDto).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
 }
