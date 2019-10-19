@@ -33,4 +33,10 @@ public interface UserDao {
     List<IncomeEntity> getPastIncomes(UserEntity user);
 
     List<ExpenseEntity> getPastCosts(UserEntity user);
+
+    List<IncomeEntity> getFutureIncomes(UserEntity user);
+
+    List<ExpenseEntity> getFutureCosts(UserEntity user);
+
+    Optional<UserEntity> findByEmail(String email);
 }

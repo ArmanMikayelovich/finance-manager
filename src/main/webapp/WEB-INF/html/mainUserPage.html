@@ -1,68 +1,30 @@
-<html  xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Finance Manager</title>
     <style>
-        .flat-table {
-            display: block;
-            font-family: sans-serif;
-            -webkit-font-smoothing: antialiased;
-            font-size: 115%;
-            overflow: auto;
-            width: auto;
+        .money {
+            font-size: 24px;
+            font-family: "DejaVu Serif", serif;
+            color: limegreen;
         }
-        th {
-            background-color: rgb(112, 196, 105);
-            color: white;
-            font-weight: normal;
-            padding: 20px 30px;
-            text-align: center;
-        }
-        td {
-            background-color: rgb(238, 238, 238);
-            color: rgb(111, 111, 111);
-            padding: 20px 30px;
-        }
-
-
     </style>
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.energizeglobal.internship.dto.UserDto"*/-->
-<h1 style="text-align: center" th:text="${user.getFirstName()} +' ' +  ${user.getLastName()}" ></h1>
+<h1 style="text-align: center" th:text="${user.getFirstName()} +' ' +  ${user.getLastName()}"></h1>
+<div style="text-align: center">
 
-<table class="flat-table" style="float: left" title="Past Incomes">
-    <caption>Past Incomes</caption>
-    <tr>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Description</th>
-    </tr>
-    <th:block th:each="income : ${pastIncomes}">
-        <tr>
-            <!--/*@thymesVar id="income" type="com.energizeglobal.internship.dto.IncomeDto"*/-->
-            <td th:text="${income.getDateTime()}">...</td>
-            <td th:text="${income.getAmount()}">...</td>
-            <td th:text="${income.getDescription()}">...</td>
-        </tr>
-    </th:block>
-</table>
+        <label>Past incomes</label>
+        <label class="money" th:text="${pastIncomesAmount}+'$'"></label>
+    <br/>
+        <label>Past costs</label>
+        <label class="money" th:text="${pastCostsAmount}+'$'"></label>
+    <br/>
+        <label>Future incomes</label>
+        <label class="money" th:text="${futureIncomesAmount}+'$'"></label>
+    <br/>
+        <label>Future costs</label>
+        <label class="money" th:text="${futureCostsAmount}+'$'"></label>
+</div>
 
-<table class="flat-table" style="float: right" title="Past Incomes">
-    <caption>Past Costs</caption>
-    <tr>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Description</th>
-    </tr>
-    <th:block th:each="expense : ${pastCosts}">
-        <tr>
-            <!--/*@thymesVar id="income" type="com.energizeglobal.internship.dto.IncomeDto"*/-->
-            <!--/*@thymesVar id="expense" type="com.energizeglobal.internship.dto.ExpenseDto"*/-->
-            <td th:text="${expense.getDateTime()}">...</td>
-            <td th:text="${expense.getAmount()}">...</td>
-            <td th:text="${expense.getDescription()}">...</td>
-        </tr>
-    </th:block>
-</table>
 </body>
 </html>

@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="futureCosts">
+    <table class="flat-table" style="float: left" title="Future  Costs">
+        <caption>Future Costs</caption>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        <th:block th:each="expense : ${futureCosts}">
+            <tr>
+                <!--/*@thymesVar id="income" type="com.energizeglobal.internship.dto.IncomeDto"*/-->
+                <!--/*@thymesVar id="expense" type="com.energizeglobal.internship.dto.ExpenseDto"*/-->
+                <td th:text="${expense.getDateTime()}">...</td>
+                <td th:text="${expense.getAmount()}">...</td>
+                <td th:text="${expense.getDescription()}">...</td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+</body>
+</html>

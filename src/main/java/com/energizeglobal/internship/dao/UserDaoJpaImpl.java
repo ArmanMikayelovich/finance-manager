@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.*;
 
@@ -185,7 +186,7 @@ public class UserDaoJpaImpl implements UserDao {
     public List<IncomeEntity> getPastIncomes(UserEntity user) {
         EntityManager manager = factory.createEntityManager();
         TypedQuery<IncomeEntity> query = manager.createQuery("Select income from IncomeEntity income " +
-                        "where income.user.id = :id and income.date < :date",
+                        "where income.user.id = :id and income.date <= :date",
                 IncomeEntity.class);
         query.setParameter("id", user.getId());
         query.setParameter("date", new Date());
@@ -198,12 +199,48 @@ public class UserDaoJpaImpl implements UserDao {
     public List<ExpenseEntity> getPastCosts(UserEntity user) {
         EntityManager manager = factory.createEntityManager();
         TypedQuery<ExpenseEntity> query = manager.createQuery("Select expense from ExpenseEntity expense " +
-                        "where expense.user.id = :id and expense.date < :date",
+                        "where expense.user.id = :id and expense.date <= :date",
                 ExpenseEntity.class);
         query.setParameter("id", user.getId());
         query.setParameter("date", new Date());
         List<ExpenseEntity> resultList = query.getResultList();
         manager.close();
         return resultList;
+    }
+
+    @Override
+    public List<IncomeEntity> getFutureIncomes(UserEntity user) {
+        EntityManager manager = factory.createEntityManager();
+        TypedQuery<IncomeEntity> query = manager.createQuery("Select income from IncomeEntity income " +
+                        "where income.user.id = :id and income.date > :date",
+                IncomeEntity.class);
+        query.setParameter("id", user.getId());
+        query.setParameter("date", new Date());
+        List<IncomeEntity> resultList = query.getResultList();
+        manager.close();
+        return resultList;
+    }
+
+    @Override
+    public List<ExpenseEntity> getFutureCosts(UserEntity user) {
+        EntityManager manager = factory.createEntityManager();
+        TypedQuery<ExpenseEntity> query = manager.createQuery("Select expense from ExpenseEntity expense " +
+                        "where expense.user.id = :id and expense.date > :date",
+                ExpenseEntity.class);
+        query.setParameter("id", user.getId());
+        query.setParameter("date", new Date());
+        List<ExpenseEntity> resultList = query.getResultList();
+        manager.close();
+        return resultList;
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        EntityManager manager = factory.createEntityManager();
+        manager.getTransaction().begin();
+        TypedQuery<UserEntity> query = manager.createQuery("SELECT u from UserEntity u where u.email = :email", UserEntity.class);
+        query.setParameter("email", email);
+        UserEntity result = query.getSingleResult();
+        return Optional.of(result);
     }
 }

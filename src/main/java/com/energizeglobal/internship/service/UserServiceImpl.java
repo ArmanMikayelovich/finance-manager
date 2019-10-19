@@ -12,6 +12,10 @@ import com.energizeglobal.internship.entity.UserEntity;
 import com.energizeglobal.internship.service.interfaces.ExpenseService;
 import com.energizeglobal.internship.service.interfaces.IncomeService;
 import com.energizeglobal.internship.service.interfaces.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -22,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-
+    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
     private final UserDao userDao;
     private final ExpenseDao expenseDao;
     private final IncomeDao incomeDao;
@@ -54,7 +58,8 @@ public class UserServiceImpl implements UserService {
         entity.setFirstName(user.getFirstName());
         entity.setLastName(user.getLastName());
         entity.setEmail(user.getEmail());
-        entity.setPassword(user.getPassword());
+        String encoded = encoder.encode(user.getPassword());
+        entity.setPassword(encoded);
         userDao.save(entity);
         return toDto(entity);
     }
@@ -90,7 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ExpenseDto>     getAllCosts(UserDto userDto) {
+    public List<ExpenseDto> getAllCosts(UserDto userDto) {
         Optional<UserEntity> optionalUserEntity = userDao.find(userDto.getId());
         if (optionalUserEntity.isPresent()) {
             UserEntity entity = optionalUserEntity.get();
@@ -118,7 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addExpense(UserDto user,ExpenseDto expense) {
+    public void addExpense(UserDto user, ExpenseDto expense) {
         Optional<UserEntity> optional = userDao.find(user.getId());
         if (optional.isPresent()) {
             UserEntity userEntity = optional.get();
@@ -128,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addIncome(UserDto user,IncomeDto income) {
+    public void addIncome(UserDto user, IncomeDto income) {
         Optional<UserEntity> optional = userDao.find(user.getId());
         if (optional.isPresent()) {
             UserEntity userEntity = optional.get();
@@ -158,5 +163,71 @@ public class UserServiceImpl implements UserService {
             return pastIncomes.stream().map(expenseService::toDto).collect(Collectors.toList());
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public List<IncomeDto> getFutureIncomes(UserDto user) {
+        Optional<UserEntity> optional = userDao.find(user.getId());
+
+        if (optional.isPresent()) {
+            UserEntity userEntity = optional.get();
+            List<IncomeEntity> futureIncomes = userDao.getFutureIncomes(userEntity);
+            return futureIncomes.stream().map(incomeService::toDto).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ExpenseDto> getFutureCosts(UserDto user) {
+        Optional<UserEntity> optional = userDao.find(user.getId());
+
+        if (optional.isPresent()) {
+            UserEntity userEntity = optional.get();
+            List<ExpenseEntity> futureCosts = userDao.getFutureCosts(userEntity);
+            return futureCosts.stream().map(expenseService::toDto).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Double getPastIncomesAmount(UserDto user) {
+        List<IncomeDto> pastIncomes = getPastIncomes(user);
+        return pastIncomes.stream().mapToDouble(IncomeDto::getAmount).reduce(Double::sum).orElse(0);
+    }
+
+    @Override
+    public Double getPastCostsAmount(UserDto user) {
+        List<ExpenseDto> pastCosts = getPastCosts(user);
+        return pastCosts.stream().mapToDouble(ExpenseDto::getAmount).reduce(Double::sum).orElse(0);
+    }
+
+    @Override
+    public Double getFutureIncomesAmount(UserDto user) {
+        List<IncomeDto> futureIncomes = getFutureIncomes(user);
+        return futureIncomes.stream().mapToDouble(IncomeDto::getAmount).reduce(Double::sum).orElse(0);
+    }
+
+    @Override
+    public Double getFutureCostsAmount(UserDto user) {
+        List<ExpenseDto> futureCosts = getFutureCosts(user);
+        return futureCosts.stream().mapToDouble(ExpenseDto::getAmount).reduce(Double::sum).orElse(0);
+    }
+
+    @Override
+    public UserEntity findUserByEmail(String email) {
+        Optional<UserEntity> entityOptional = userDao.findByEmail(email);
+        if (entityOptional.isPresent()) {
+            return entityOptional.get();
+        }
+        throw new RuntimeException("No user with email: " + email);
+    }
+
+    @Override
+    public UserDto getAuthenticatedUser() {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = principal.getUsername();
+        UserEntity userByEmail = findUserByEmail(email);
+        UserDto userDto = toDto(userByEmail);
+        return userDto;
     }
 }

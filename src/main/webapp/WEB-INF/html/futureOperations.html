@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Future Operations</title>
+    <style>
+        .flat-table {
+            display: block;
+            font-family: sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 115%;
+            overflow: auto;
+            width: auto;
+        }
+
+        th {
+            background-color: rgb(112, 196, 105);
+            color: white;
+            font-weight: normal;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        td {
+            background-color: rgb(238, 238, 238);
+            color: rgb(111, 111, 111);
+            padding: 20px 30px;
+        }
+    </style>
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.energizeglobal.internship.dto.UserDto"*/-->
+<h1 style="text-align: center" th:text="${user.getFirstName()} +' ' +  ${user.getLastName()}"></h1>
+<div style="text-align: left" th:include="fragments/futureCosts"></div>
+<div style="text-align: right" th:include="fragments/futureIncomes"></div>
+</body>
+</html>

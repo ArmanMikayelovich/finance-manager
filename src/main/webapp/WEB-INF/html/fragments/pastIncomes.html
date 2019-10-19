@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+</head>
+<body>
+<div th:fragment="pastIncomes">
+    <table class="flat-table" style="float: right" title="Past Incomes">
+        <caption>Past Incomes</caption>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        <th:block th:each="income : ${pastIncomes}">
+            <tr>
+                <!--/*@thymesVar id="income" type="com.energizeglobal.internship.dto.IncomeDto"*/-->
+                <td th:text="${income.getDateTime()}">...</td>
+                <td th:text="${income.getAmount()}">...</td>
+                <td th:text="${income.getDescription()}">...</td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+</body>
+</html>

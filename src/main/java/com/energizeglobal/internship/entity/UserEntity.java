@@ -1,5 +1,6 @@
 package com.energizeglobal.internship.entity;
 
+import com.energizeglobal.internship.util.UserRole;
 import lombok.Data;
 import lombok.ToString;
 
@@ -19,12 +20,11 @@ public class UserEntity {
     private String firstName;
 
     private String lastName;
-    @Column(unique = true, updatable = false)
 
+    @Column(unique = true, updatable = false)
     private String email;
 
     private String password;
-
 
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -35,6 +35,8 @@ public class UserEntity {
     @ToString.Exclude
     @JoinColumn(name = "user_id")
     private List<IncomeEntity> incomes = new ArrayList<>();
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole = UserRole.USER;
 
-    private String role = "user";
 }
